@@ -19,12 +19,13 @@ jobs:
     - name: Compile platform dependent binary
       run: pyinstaller http_serv.py --onefile --name mypydemo-${{ runner.os }} 
       #;ls -ld dist/mypydemo
-  # build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: Build the Docker image
-  #     run: docker build . --file Dockerfile --tag nikhilpagote/mypydemo:$(date +%s)
-  #   - name: Test the Docker image
-  #   - name: Push the Docker image to Dockerhub Registry 
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag nikhilpagote/mypydemo-${{ runner.os }}:$(date +%s)
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Test the Docker image
+    - name: Push the Docker image to Dockerhub Registry 
       
