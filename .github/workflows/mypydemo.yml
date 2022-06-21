@@ -17,28 +17,35 @@ jobs:
     - name: Install python3 pip modules
       run: python3 -m pip install -r requirements.txt
     - name: Compile platform dependent binary
-      run: pyinstaller http_serv.py --onefile --name mypydemo-${{ runner.os }} 
-      #;ls -ld dist/mypydemo
+      run: pyinstaller http_serv.py --onefile --name mypydemo-${{ runner.os }}
     - id: string
       uses: ASzc/change-string-case-action@v2
       with:
         string: ${{ runner.os }}
-    - name: install docker client on macOS
-      run: curl https://download.docker.com/mac/static/stable/x86_64/docker-20.10.9.tgz --output docker-20.10.9.tgz; tar xzvf docker-20.10.9.tgz; xattr -rc docker; cp docker/docker /usr/local/bin/
-      if: runner.os == 'macOS'
-    - name: install docker bildx on macOS
-      uses: docker/setup-buildx-action@v2
-      id: buildx
+    - name: Build using Kaniko
+      uses: aevea/action-kaniko@master
       with:
-        install: true
-      if: runner.os == 'macOS'
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag nikhilpagote/mypydemo-${{ steps.string.outputs.lowercase }}:$(date +%s)
-    - name: Login to DockerHub
-      uses: docker/login-action@v2
-      with:
+        image: nikhilpagote/mypydemo-${{ steps.string.outputs.lowercase }}
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
+      #;ls -ld dist/mypydemo
+    
+    # - name: install docker client on macOS
+    #   run: curl https://download.docker.com/mac/static/stable/x86_64/docker-20.10.9.tgz --output docker-20.10.9.tgz; tar xzvf docker-20.10.9.tgz; xattr -rc docker; cp docker/docker /usr/local/bin/
+    #   if: runner.os == 'macOS'
+    # - name: install docker bildx on macOS
+    #   uses: docker/setup-buildx-action@v2
+    #   id: buildx
+    #   with:
+    #     install: true
+    #   if: runner.os == 'macOS'
+    # - name: Build the Docker image
+    #   run: docker build . --file Dockerfile --tag nikhilpagote/mypydemo-${{ steps.string.outputs.lowercase }}:$(date +%s)
+    # - name: Login to DockerHub
+    #   uses: docker/login-action@v2
+    #   with:
+    #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+    #     password: ${{ secrets.DOCKERHUB_TOKEN }}
     # - name: Test the Docker image
     # - name: Push the Docker image to Dockerhub Registry 
       
