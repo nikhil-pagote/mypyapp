@@ -1,0 +1,5 @@
+docker build -t nikhilpagote/pydemo .
+docker push nikhilpagote/pydemo
+docker run -d --name mypydemo -p 8080:8080  nikhilpagote/pydemo
+k run mypydemo --image=nikhilpagote/pydemo --restart=Never
+k expose po mypydemo --type=NodePort --port=8080 --name mypydemosvc
