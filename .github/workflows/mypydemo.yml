@@ -24,9 +24,12 @@ jobs:
         string: ${{ runner.os }}
     - name: Install aws cli
       uses: isbang/setup-awscli@v0.1.0
+    - name: Compress compiled package
+      shell: bash
+      run: cd ./dist; tar -zcvf mypydemo-${{ runner.os }}.tgz mypydemo-${{ runner.os }}*; cd ..
     - name : Upload Artifact to s3
       shell: bash
-      run: aws s3 cp ./dist/mypydemo-${{ runner.os }}* s3://mypydemo/mypydemo-${{ steps.string.outputs.lowercase }}
+      run: aws s3 cp ./dist/mypydemo-${{ runner.os }}.tgz s3://mypydemo/mypydemo-${{ steps.string.outputs.lowercase }}.tgz
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
