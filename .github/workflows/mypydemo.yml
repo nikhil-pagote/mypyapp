@@ -22,14 +22,21 @@ jobs:
       uses: ASzc/change-string-case-action@v2
       with:
         string: ${{ runner.os }}
-    - name: Upload artifact to S3
-      uses: prewk/s3-cp-action@v2
-      with:
-        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        source: '.dist/mypydemo-${{ runner.os }}'
-        dest: 's3://mypydemo/mypydemo-${{ steps.string.outputs.lowercase }}'
-        flags: --recursive
+    - name: Install aws cli
+      uses: isbang/setup-awscli@v0.1.0
+    # - name: Upload artifact to S3
+    #   run: aws s3 cp .dist/mypydemo-${{ runner.os }} mypydemo/mypydemo-${{ steps.string.outputs.lowercase }}
+    # # - name: Upload artifact to S3
+    #   uses: prewk/s3-cp-action@v2
+    #   with:
+    #     aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     source: '.dist/mypydemo-${{ runner.os }}'
+    #     dest: 's3://mypydemo/mypydemo-${{ steps.string.outputs.lowercase }}'
+    #     flags: --recursive
+
+
+
     # - name: Build using Kaniko
     #   uses: aevea/action-kaniko@master
     #   with:
