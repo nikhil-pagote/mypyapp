@@ -24,6 +24,11 @@ jobs:
         string: ${{ runner.os }}
     - name: Install aws cli
       uses: isbang/setup-awscli@v0.1.0
+    - name : Upload Artifact to s3
+      run: aws s3 cp .dist/mypydemo-${{ runner.os }} mypydemo/mypydemo-${{ steps.string.outputs.lowercase }}
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     # - name: Upload artifact to S3
     #   run: aws s3 cp .dist/mypydemo-${{ runner.os }} mypydemo/mypydemo-${{ steps.string.outputs.lowercase }}
     # # - name: Upload artifact to S3
