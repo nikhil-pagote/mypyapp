@@ -17,7 +17,7 @@ jobs:
     - name: Install python3 pip modules
       run: python3 -m pip install -r requirements.txt
     - name: Compile platform dependent binary
-      run: pyinstaller http_serv.py --onefile --name mypydemo
+      run: pyinstaller http_serv.py --onefile --name mypydemo ;ls -latr
   # build:
   #   runs-on: ubuntu-latest
   #   steps:
