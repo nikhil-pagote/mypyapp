@@ -52,13 +52,10 @@ jobs:
     # - run: echo ${{ steps.plan.outputs.stderr }}
     # - run: echo ${{ steps.plan.outputs.exitcode }}
     - name: Terraform apply
-      uses: kciter/terraform-apply-for-aws-action@v3
-      with:
-        access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        #region: eu-west-2
-        #variables: var=${{ github.sha }}
-        #path: terraform/dev
+      run: terraform apply -auto-approve
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       if: ${{ success() }}
 
     - name : Upload Artifact to s3
