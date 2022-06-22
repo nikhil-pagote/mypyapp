@@ -35,10 +35,28 @@ jobs:
 
     - name: Install terraform client
       uses: hashicorp/setup-terraform@v2
+    - name: Terraform check format
+      id: fmt
+      run: terraform fmt -check
+      continue-on-error: true
     - name: Terraform Init
       run: terraform init
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color
+      continue-on-error: true
+    - run: echo ${{ steps.plan.outputs.stdout }}
+    - run: echo ${{ steps.plan.outputs.stderr }}
+    - run: echo ${{ steps.plan.outputs.exitcode }}
+    - name: Terraform apply
+      run: terraform apply -auto-approve
+      if: ${{ success() }}
 
     - name : Upload Artifact to s3
+      if: ${{ success() }}
       shell: bash
       run: aws s3 cp ./dist/mypydemo-${{ runner.os }}.tgz s3://mypydemo/mypydemo-${{ steps.string.outputs.lowercase }}.tgz
       env:
