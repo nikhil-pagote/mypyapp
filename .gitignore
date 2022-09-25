@@ -131,3 +131,4 @@ dmypy.json
 # Terraform Provider
 .terraform
 *.backup
+checkov_env
